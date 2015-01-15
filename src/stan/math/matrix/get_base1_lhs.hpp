@@ -28,8 +28,8 @@ namespace stan {
                      size_t i, 
                      const std::string& error_msg,
                      size_t idx) {
-      using stan::error_handling::check_range;
-      check_range(x.size(),i,error_msg,idx);
+      using stan::math::check_range;
+      check_range("[]", "x", x.size(), i, idx, error_msg);
       return x[i - 1];
     }
 
@@ -55,8 +55,8 @@ namespace stan {
                      size_t i2,
                      const std::string& error_msg,
                      size_t idx) {
-      using stan::error_handling::check_range;
-      check_range(x.size(),i1,error_msg,idx);
+      using stan::math::check_range;
+      check_range("[]", "x", x.size(), i1, idx, error_msg);
       return get_base1_lhs(x[i1 - 1],i2,error_msg,idx+1);
     }
 
@@ -84,8 +84,8 @@ namespace stan {
                      size_t i3,
                      const std::string& error_msg,
                      size_t idx) {
-      using stan::error_handling::check_range;
-      check_range(x.size(),i1,error_msg,idx);
+      using stan::math::check_range;
+      check_range("[]", "x", x.size(), i1, idx, error_msg);
       return get_base1_lhs(x[i1 - 1],i2,i3,error_msg,idx+1);
     }
 
@@ -115,8 +115,8 @@ namespace stan {
                      size_t i4,
                      const std::string& error_msg,
                      size_t idx) {
-      using stan::error_handling::check_range;
-      check_range(x.size(),i1,error_msg,idx);
+      using stan::math::check_range;
+      check_range("[]", "x", x.size(), i1, idx, error_msg);
       return get_base1_lhs(x[i1 - 1],i2,i3,i4,error_msg,idx+1);
     }
 
@@ -148,8 +148,8 @@ namespace stan {
                      size_t i5,
                      const std::string& error_msg,
                      size_t idx) {
-      using stan::error_handling::check_range;
-      check_range(x.size(),i1,error_msg,idx);
+      using stan::math::check_range;
+      check_range("[]", "x", x.size(), i1, idx, error_msg);
       return get_base1_lhs(x[i1 - 1],i2,i3,i4,i5,error_msg,idx+1);
     }
 
@@ -183,8 +183,8 @@ namespace stan {
                      size_t i6,
                      const std::string& error_msg,
                      size_t idx) {
-      using stan::error_handling::check_range;
-      check_range(x.size(),i1,error_msg,idx);
+      using stan::math::check_range;
+      check_range("[]", "x", x.size(), i1, idx, error_msg);
       return get_base1_lhs(x[i1 - 1],i2,i3,i4,i5,i6,error_msg,idx+1);
     }
 
@@ -221,8 +221,8 @@ namespace stan {
                      size_t i7,
                      const std::string& error_msg,
                      size_t idx) {
-      using stan::error_handling::check_range;
-      check_range(x.size(),i1,error_msg,idx);
+      using stan::math::check_range;
+      check_range("[]", "x", x.size(), i1, idx, error_msg);
       return get_base1_lhs(x[i1 - 1],i2,i3,i4,i5,i6,i7,error_msg,idx+1);
     }
 
@@ -261,8 +261,8 @@ namespace stan {
                      size_t i8,
                      const std::string& error_msg,
                      size_t idx) {
-      using stan::error_handling::check_range;
-      check_range(x.size(),i1,error_msg,idx);
+      using stan::math::check_range;
+      check_range("[]", "x", x.size(), i1, idx, error_msg);
       return get_base1_lhs(x[i1 - 1],i2,i3,i4,i5,i6,i7,i8,error_msg,idx+1);
     }
 
@@ -294,8 +294,8 @@ namespace stan {
                   size_t m,
                   const std::string& error_msg,
                   size_t idx) {
-      using stan::error_handling::check_range;
-      check_range(x.rows(),m,error_msg,idx);
+      using stan::math::check_range;
+      check_range("[]", "rows of x", x.rows(), m, idx, error_msg);
       return x.block(m-1,0,1,x.cols());
     }
 
@@ -322,9 +322,9 @@ namespace stan {
                      size_t n,
                      const std::string& error_msg,
                      size_t idx) {
-      using stan::error_handling::check_range;
-      check_range(x.rows(),m,error_msg,idx);
-      check_range(x.cols(),n,error_msg,idx + 1);
+      using stan::math::check_range;
+      check_range("[]", "rows of x", x.rows(), m, idx, error_msg);
+      check_range("[]", "cols of x", x.rows(), n, idx + 1, error_msg);
       return x(m - 1, n - 1);
     }
 
@@ -348,8 +348,8 @@ namespace stan {
                      size_t m,
                      const std::string& error_msg,
                      size_t idx) {
-      using stan::error_handling::check_range;
-      check_range(x.size(),m,error_msg,idx);
+      using stan::math::check_range;
+      check_range("[]", "x", x.size(), m, idx, error_msg);
       return x(m - 1);
     }
 
@@ -373,8 +373,8 @@ namespace stan {
                      size_t n,
                      const std::string& error_msg,
                      size_t idx) {
-      using stan::error_handling::check_range;
-      check_range(x.size(),n,error_msg,idx);
+      using stan::math::check_range;
+      check_range("[]", "x", x.size(), n, idx, error_msg);
       return x(n - 1);
     }
     

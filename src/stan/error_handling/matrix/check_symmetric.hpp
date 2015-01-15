@@ -3,7 +3,8 @@
 
 #include <sstream>
 
-#include <stan/error_handling/scalar/dom_err.hpp>
+#include <stan/error_handling/domain_error.hpp>
+#include <stan/error_handling/matrix/check_square.hpp>
 #include <stan/error_handling/matrix/constraint_tolerance.hpp>
 #include <stan/math/matrix/Eigen.hpp>
 #include <stan/math/matrix/meta/index_type.hpp>
@@ -11,25 +12,32 @@
 
 namespace stan {
 
-  namespace error_handling {
+  namespace math {
 
     /**
-     * Return <code>true</code> if the specified matrix is symmetric
+     * Return <code>true</code> if the specified matrix is symmetric.
      * 
-     * NOTE: squareness is not checked by this function
+     * The error message is either 0 or 1 indexed, specified by
+     * <code>stan::error_index::value</code>.
      *
-     * @param function 
-     * @param y Matrix to test.
-     * @param name
-     * @return <code>true</code> if the matrix is symmetric.
-     * @return throws if any element not on the main diagonal is NaN
-     * @tparam T Type of scalar.
+     * @tparam T_y Type of scalar.
+     *
+     * @param function Function name (for error messages)
+     * @param name Variable name (for error messages)
+     * @param y Matrix to test
+     *
+     * @return <code>true</code> if the matrix is symmetric
+     * @throw <code>std::invalid_argument</code> if the matrix is not square.
+     * @throw <code>std::domain_error</code> if any element not on the 
+     *   main diagonal is <code>NaN</code>
      */
     template <typename T_y>
     inline bool 
     check_symmetric(const std::string& function,
                     const std::string& name,
                     const Eigen::Matrix<T_y,Eigen::Dynamic,Eigen::Dynamic>& y) {
+      check_square(function, name, y);
+
       using Eigen::Dynamic;
       using Eigen::Matrix;
       using stan::math::index_type;
@@ -45,14 +53,14 @@ namespace stan {
             std::ostringstream msg1;
             msg1 << "is not symmetric. " 
                     << name << "[" << stan::error_index::value + m << "," 
-                    << stan::error_index::value +n << "] is ";
+                    << stan::error_index::value +n << "] = ";
             std::ostringstream msg2;
             msg2 << ", but "
                  << name << "[" << stan::error_index::value +n << "," 
                  << stan::error_index::value + m 
-                 << "] element is " << y(n,m);
-            dom_err(function, name, y(m,n), 
-                    msg1.str(), msg2.str());
+                 << "] = " << y(n,m);
+            domain_error(function, name, y(m,n), 
+                         msg1.str(), msg2.str());
             return false;
           }
         }

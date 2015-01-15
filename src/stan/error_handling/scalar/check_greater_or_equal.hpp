@@ -1,11 +1,11 @@
 #ifndef STAN__ERROR_HANDLING__SCALAR__CHECK_GREATER_OR_EQUAL_HPP
 #define STAN__ERROR_HANDLING__SCALAR__CHECK_GREATER_OR_EQUAL_HPP
 
-#include <stan/error_handling/scalar/dom_err_vec.hpp>
-#include <stan/error_handling/scalar/dom_err.hpp>
+#include <stan/error_handling/domain_error_vec.hpp>
+#include <stan/error_handling/domain_error.hpp>
 
 namespace stan {
-  namespace error_handling {
+  namespace math {
 
     namespace {
       template <typename T_y,
@@ -23,7 +23,7 @@ namespace stan {
               std::stringstream msg;
               msg << ", but must be greater than or equal to ";
               msg << low_vec[n];
-              dom_err(function, name, y,
+              domain_error(function, name, y,
                       "is ", msg.str());
             }
           }
@@ -46,7 +46,7 @@ namespace stan {
               std::stringstream msg;
               msg << ", but must be greater than or equal to ";
               msg << low_vec[n];
-              dom_err_vec(function, name, y, n,
+              domain_error_vec(function, name, y, n,
                           "is ", msg.str());
             }
           }
@@ -55,7 +55,25 @@ namespace stan {
       };
     }
     
-    // throws if any element in y or low is nan
+    /**
+     * Return <code>true</code> if <code>y</code> is greater or equal
+     * than <code>low</code>.
+     *
+     * This function is vectorized and will check each element of
+     * <code>y</code> against each element of <code>low</code>.
+     *
+     * @tparam T_y Type of y
+     * @tparam T_low Type of lower bound
+     *
+     * @param function Function name (for error messages)
+     * @param name Variable name (for error messages)
+     * @param y Variable to check
+     * @param low Lower bound
+     *
+     * @return <code>true</code> if y is greater or equal than low.
+     * @throw <code>domain_error</code> if y is not greater or equal to low or 
+     *   if any element of y or low is NaN.
+     */
     template <typename T_y, typename T_low>
     inline bool check_greater_or_equal(const std::string& function,
                                        const std::string& name,

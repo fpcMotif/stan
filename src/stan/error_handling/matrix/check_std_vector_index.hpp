@@ -3,36 +3,40 @@
 
 #include <sstream>
 #include <vector>
-#include <stan/error_handling/scalar/dom_err.hpp>
+#include <stan/error_handling/out_of_range.hpp>
+#include <stan/meta/traits.hpp>
 
 namespace stan {
-  namespace error_handling {
+  namespace math {
 
     /**
      * Return <code>true</code> if the specified index is valid in std vector
      *
-     * NOTE: this will not throw if y contains nan values.
+     * This check is 1-indexed by default. This behavior can be changed
+     * by setting <code>stan::error_index::value</code>.
      *
-     * @param function
-     * @param i is index
-     * @param y std vector to test against
-     * @param name
+     * @tparam T Scalar type
+     *
+     * @param function Function name (for error messages)
+     * @param name Variable name (for error messages)
+     * @param y <code>std::vector</code> to test
+     * @param i Index
+     * 
      * @return <code>true</code> if the index is a valid in std vector.
-     * @tparam T Type of scalar.
+     * @throw <code>std::out_of_range</code> if the index is out of range.
      */
-    template <typename T_y>
+    template <typename T>
     inline bool check_std_vector_index(const std::string& function,
                                        const std::string& name,
-                                       const std::vector<T_y>& y,
-                                       size_t i) {
-      if ((i > 0) && (i <= static_cast<size_t>(y.size())))
+                                       const std::vector<T>& y,
+                                       int i) {
+      if (i >= stan::error_index::value
+          && i < y.size() + stan::error_index::value)
         return true;
-
-      std::ostringstream msg;
-      msg << ") must be greater than 0 and less than " 
-          << y.size();
-      dom_err(function, name, i,
-              "(", msg.str());
+      
+      std::stringstream msg;
+      msg << " for " << name;
+      out_of_range(function, y.size(), i, msg.str());
       return false;
     }
 

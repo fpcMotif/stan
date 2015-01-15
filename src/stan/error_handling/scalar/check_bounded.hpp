@@ -1,12 +1,12 @@
 #ifndef STAN__ERROR_HANDLING__SCALAR__CHECK_BOUNDED_HPP
 #define STAN__ERROR_HANDLING__SCALAR__CHECK_BOUNDED_HPP
 
-#include <stan/error_handling/scalar/dom_err.hpp>
-#include <stan/error_handling/scalar/dom_err_vec.hpp>
+#include <stan/error_handling/domain_error.hpp>
+#include <stan/error_handling/domain_error_vec.hpp>
 #include <stan/meta/traits.hpp>
 
 namespace stan {
-  namespace error_handling {
+  namespace math {
 
     namespace detail {
       
@@ -35,7 +35,7 @@ namespace stan {
               msg << ", but must be between ";
               msg << "(" << low_vec[n] << ", " << high_vec[n] << ")";
 
-              dom_err(function, name, y,
+              domain_error(function, name, y,
                       "is ", msg.str());
             }
           }
@@ -60,7 +60,7 @@ namespace stan {
               std::stringstream msg;
               msg << ", but must be between ";
               msg << "(" << low_vec[n] << ", " << high_vec[n] << ")";
-              dom_err_vec(function, name, y, n,
+              domain_error_vec(function, name, y, n,
                           "is ", msg.str());
             }
           }
@@ -69,7 +69,25 @@ namespace stan {
       };
     }
 
-    // public check_bounded function
+    /**
+     * Return <code>true</code> if the value is between the low and high
+     * values, inclusively.
+     *
+     * @tparam T_y Type of value
+     * @tparam T_low Type of low value
+     * @tparam T_high Type of high value
+     *
+     * @param function Function name (for error messages)
+     * @param name Variable name (for error messages)
+     * @param y Value to check
+     * @param low Low bound
+     * @param high High bound
+     *
+     * @return <code>true</code> if the value is between low and high,
+     *   inclusively.
+     * @throw <code>std::domain_error</code> otherwise. This also throws
+     *   if any of the arguments are NaN.
+     */
     template <typename T_y, typename T_low, typename T_high>
     inline bool check_bounded(const std::string& function,
                               const std::string& name,  

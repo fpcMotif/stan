@@ -1,7 +1,6 @@
 #ifndef STAN__PROB__DISTRIBUTIONS__MULTIVARIATE__CONTINUOUS__LKJ_CORR_HPP
 #define STAN__PROB__DISTRIBUTIONS__MULTIVARIATE__CONTINUOUS__LKJ_CORR_HPP
 
-#include <stan/error_handling/matrix/check_size_match.hpp>
 #include <stan/error_handling/scalar/check_finite.hpp>
 #include <stan/error_handling/scalar/check_positive.hpp>
 #include <stan/prob/constants.hpp>
@@ -53,8 +52,8 @@ namespace stan {
       static const std::string function("stan::prob::lkj_corr_cholesky_log");
 
       using boost::math::tools::promote_args;
-      using stan::error_handling::check_positive;
-      using stan::error_handling::check_lower_triangular;
+      using stan::math::check_positive;
+      using stan::math::check_lower_triangular;
       using stan::math::sum;
       
       typename promote_args<T_covar,T_shape>::type lp(0.0);
@@ -104,19 +103,13 @@ namespace stan {
                  const T_shape& eta) {
       static const std::string function("stan::prob::lkj_corr_log");
 
-      using stan::error_handling::check_size_match;
-      using stan::error_handling::check_not_nan;
-      using stan::error_handling::check_positive;
-      using stan::error_handling::check_corr_matrix;
+      using stan::math::check_positive;
+      using stan::math::check_corr_matrix;
       using stan::math::sum;
       using boost::math::tools::promote_args;
       
       typename promote_args<T_y,T_shape>::type lp(0.0);
       check_positive(function, "Shape parameter", eta);
-      check_size_match(function, 
-                       "Rows of correlation matrix", y.rows(), 
-                       "columns of correlation matrix", y.cols());
-      check_not_nan(function, "Correlation matrix", y);
       check_corr_matrix(function, "Correlation matrix", y);
       
       const unsigned int K = y.rows();
@@ -154,7 +147,7 @@ namespace stan {
                           RNG& rng) {
       static const std::string function("stan::prob::lkj_corr_cholesky_rng");
 
-      using stan::error_handling::check_positive;
+      using stan::math::check_positive;
       
       check_positive(function, "Shape parameter", eta);
 
@@ -179,7 +172,7 @@ namespace stan {
 
       static const std::string function("stan::prob::lkj_corr_rng");
 
-      using stan::error_handling::check_positive;
+      using stan::math::check_positive;
       
       check_positive(function, "Shape parameter", eta);
 

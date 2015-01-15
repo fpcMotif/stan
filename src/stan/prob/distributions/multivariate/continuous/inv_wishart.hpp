@@ -4,6 +4,7 @@
 #include <stan/error_handling/matrix/check_ldlt_factor.hpp>
 #include <stan/error_handling/scalar/check_greater.hpp>
 #include <stan/error_handling/matrix/check_size_match.hpp>
+#include <stan/error_handling/matrix/check_square.hpp>
 #include <stan/math/matrix/meta/index_type.hpp>
 #include <stan/math/matrix/log_determinant_ldlt.hpp>
 #include <stan/math/matrix/mdivide_left_ldlt.hpp>
@@ -55,8 +56,9 @@ namespace stan {
       using boost::math::tools::promote_args;
       using Eigen::Dynamic;
       using Eigen::Matrix;
-      using stan::error_handling::check_greater;
-      using stan::error_handling::check_size_match;
+      using stan::math::check_greater;
+      using stan::math::check_size_match;
+      using stan::math::check_square;
       using stan::math::index_type;
 
       typename index_type<Matrix<T_scale,Dynamic,Dynamic> >::type k 
@@ -64,12 +66,8 @@ namespace stan {
       typename promote_args<T_y,T_dof,T_scale>::type lp(0.0);
       
       check_greater(function, "Degrees of freedom parameter", nu, k-1);
-      check_size_match(function, 
-                       "Rows of random variable", W.rows(), 
-                       "columns of random variable", W.cols());
-      check_size_match(function, 
-                       "Rows of scale parameter", S.rows(), 
-                       "columns of scale parameter", S.cols());
+      check_square(function, "random variable", W);
+      check_square(function, "scale parameter", S);
       check_size_match(function, 
                        "Rows of random variable", W.rows(), 
                        "columns of scale parameter", S.rows());
@@ -81,7 +79,7 @@ namespace stan {
       using stan::math::mdivide_left_ldlt;
       using stan::math::trace;
       using stan::math::LDLT_factor;
-      using stan::error_handling::check_ldlt_factor;
+      using stan::math::check_ldlt_factor;
       
       LDLT_factor<T_y,Eigen::Dynamic,Eigen::Dynamic> ldlt_W(W);
       check_ldlt_factor(function, "LDLT_Factor of random variable", ldlt_W);
@@ -130,17 +128,15 @@ namespace stan {
 
       static const std::string function("stan::prob::inv_wishart_rng");
       
-      using stan::error_handling::check_greater;
-      using stan::error_handling::check_size_match;
+      using stan::math::check_greater;
+      using stan::math::check_square;
       using Eigen::MatrixXd;
       using stan::math::index_type;
 
       typename index_type<MatrixXd>::type k = S.rows();
       
       check_greater(function, "Degrees of freedom parameter", nu, k-1);
-      check_size_match(function, 
-                       "Rows of scale parameter", S.rows(),
-                       "columns of scale parameter", S.cols());
+      check_square(function, "scale parameter", S);
 
       MatrixXd S_inv = MatrixXd::Identity(k, k);
       S_inv = S.ldlt().solve(S_inv);

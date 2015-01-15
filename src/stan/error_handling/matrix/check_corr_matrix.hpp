@@ -3,8 +3,8 @@
 
 #include <sstream>
 
-#include <stan/error_handling/scalar/dom_err.hpp>
-#include <stan/error_handling/scalar/check_positive.hpp>
+#include <stan/error_handling/domain_error.hpp>
+#include <stan/error_handling/scalar/check_positive_size.hpp>
 #include <stan/error_handling/matrix/check_pos_definite.hpp>
 #include <stan/error_handling/matrix/check_symmetric.hpp>
 #include <stan/error_handling/matrix/check_size_match.hpp>
@@ -15,24 +15,32 @@
 
 namespace stan {
 
-  namespace error_handling {
+  namespace math {
 
     /**
      * Return <code>true</code> if the specified matrix is a valid
-     * correlation matrix.  A valid correlation matrix is symmetric,
-     * has a unit diagonal (all 1 values), and has all values between
-     * -1 and 1 (inclussive).  
+     * correlation matrix.  
      *
-     * @param function 
-     * @param y Matrix to test.
-     * @param name 
+     * A valid correlation matrix is symmetric, has a unit diagonal
+     * (all 1 values), and has all values between -1 and 1
+     * (inclusive).
+     *
+     * This function throws exceptions if the variable is not a valid
+     * correlation matrix.
+     *
+     * @tparam T_y Type of scalar
+     *
+     * @param function Name of the function this was called from
+     * @param name Name of the variable
+     * @param y Matrix to test
      * 
      * @return <code>true</code> if the specified matrix is a valid
-     * correlation matrix.
-     * @return throw if any element in matrix is nan
-     * @tparam T Type of scalar.
+     * correlation matrix
+     * @throw <code>std::invalid_argument</code> if the matrix is not square
+     *   or if the matrix is 0x0
+     * @throw <code>std::domain_error</code> if the matrix is non-symmetric,
+     *   diagonals not near 1, not positive definite, or any of the elements nan.
      */
-    // FIXME: update warnings
     template <typename T_y>
     inline bool check_corr_matrix(const std::string& function,
                                   const std::string& name,
@@ -47,7 +55,7 @@ namespace stan {
                        "Rows of correlation matrix", y.rows(), 
                        "columns of correlation matrix", y.cols());
       
-      check_positive(function, "rows", y.rows());
+      check_positive_size(function, name, "rows", y.rows());
 
       check_symmetric(function, "y", y);
       
@@ -58,13 +66,13 @@ namespace stan {
               << name << "(" << stan::error_index::value + k 
               << "," << stan::error_index::value + k 
               << ") is "; ;
-          dom_err(function, name, y(k,k),
+          domain_error(function, name, y(k,k),
                   msg.str(),
                   ", but should be near 1.0");
           return false;
         }
       }
-      stan::error_handling::check_pos_definite(function, "y", y);
+      stan::math::check_pos_definite(function, "y", y);
       return true;
     }
 

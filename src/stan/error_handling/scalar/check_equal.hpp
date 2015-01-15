@@ -1,11 +1,11 @@
 #ifndef STAN__ERROR_HANDLING__SCALAR__CHECK_EQUAL_HPP
 #define STAN__ERROR_HANDLING__SCALAR__CHECK_EQUAL_HPP
 
-#include <stan/error_handling/scalar/dom_err.hpp>
-#include <stan/error_handling/scalar/dom_err_vec.hpp>
+#include <stan/error_handling/domain_error.hpp>
+#include <stan/error_handling/domain_error_vec.hpp>
 
 namespace stan {
-  namespace error_handling {
+  namespace math {
 
     namespace {
       template <typename T_y,
@@ -23,7 +23,7 @@ namespace stan {
               std::stringstream msg;
               msg << ", but must be equal to ";
               msg << eq_vec[n];
-              dom_err(function, name, y,
+              domain_error(function, name, y,
                       "is ", msg.str());
             }
           }
@@ -47,7 +47,7 @@ namespace stan {
               std::stringstream msg;
               msg << ", but must be equal to ";
               msg << eq_vec[n];
-              dom_err_vec(function, name, y, n,
+              domain_error_vec(function, name, y, n,
                           "is ", msg.str());
             }
           }
@@ -55,6 +55,30 @@ namespace stan {
         }
       };
     }
+
+    /**
+     * Return <code>true</code> if <code>y</code> is equal to
+     * <code>eq</code>.
+     *
+     * This function is vectorized over both <code>y</code> and
+     * <code>eq</code>. If both <code>y</code> and <code>eq</code> are
+     * scalar or vector-like, then each element is compared in order.
+     * If one of <code>y</code> or <code>eq</code> are vector and the
+     * other is scalar, then the scalar is broadcast to the size of
+     * the vector.
+     *
+     * @tparam T_y Type of variable
+     * @tparam T_eq Type of comparison
+     *
+     * @param function Function name (for error messages)
+     * @param name Variable name (for error messages)
+     * @param y Variable to check equality
+     * @param eq Expected value for y
+     *
+     * @return <code>true</code> if y is equal to eq
+     * @throw <code>std::domain_error</code> if y is unequal to eq or 
+     *    if any element of y or eq is NaN.
+     */
     template <typename T_y, typename T_eq>
     inline bool check_equal(const std::string& function,
                             const std::string& name,

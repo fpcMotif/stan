@@ -1,11 +1,11 @@
 #ifndef STAN__ERROR_HANDLING__SCALAR__CHECK_LESS_HPP
 #define STAN__ERROR_HANDLING__SCALAR__CHECK_LESS_HPP
 
-#include <stan/error_handling/scalar/dom_err.hpp>
-#include <stan/error_handling/scalar/dom_err_vec.hpp>
+#include <stan/error_handling/domain_error.hpp>
+#include <stan/error_handling/domain_error_vec.hpp>
 
 namespace stan {
-  namespace error_handling {
+  namespace math {
 
     namespace {
       template <typename T_y, typename T_high, bool is_vec>
@@ -21,7 +21,7 @@ namespace stan {
               std::stringstream msg;
               msg << ", but must be less than ";
               msg << high_vec[n];
-              dom_err(function, name, y,
+              domain_error(function, name, y,
                       "is ", msg.str());
             }
           }
@@ -42,7 +42,7 @@ namespace stan {
               std::stringstream msg;
               msg << ", but must be less than ";
               msg << high_vec[n];
-              dom_err_vec(function, name, y, n,
+              domain_error_vec(function, name, y, n,
                           "is ", msg.str());
             }
           }
@@ -51,7 +51,25 @@ namespace stan {
       };
     }
 
-    // throws if any element of y or high is nan
+    /**
+     * Return <code>true</code> if <code>y</code> is strictly less
+     * than <code>high</code>.
+     *
+     * This function is vectorized and will check each element of
+     * <code>y</code> against each element of <code>high</code>.
+     *
+     * @tparam T_y Type of y
+     * @tparam T_high Type of upper bound
+     *
+     * @param function Function name (for error messages)
+     * @param name Variable name (for error messages)
+     * @param y Variable to check
+     * @param high Upper bound
+     *
+     * @return <code>true</code> if y is strictly less than low.
+     * @throw <code>domain_error</code> if y is not less than low
+     *   or if any element of y or high is NaN.
+     */
     template <typename T_y, typename T_high>
     inline bool check_less(const std::string& function,
                            const std::string& name,  
