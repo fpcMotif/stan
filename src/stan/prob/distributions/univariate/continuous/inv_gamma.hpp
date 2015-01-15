@@ -51,7 +51,6 @@ namespace stan {
       using stan::is_constant_struct;
       using stan::math::check_not_nan;
       using stan::math::check_positive_finite;
-      using boost::math::tools::promote_args;
       using stan::math::check_consistent_sizes;
       using stan::math::value_of;
 
@@ -193,7 +192,6 @@ namespace stan {
       using stan::math::check_less_or_equal;
       using stan::math::check_nonnegative;
       using stan::math::value_of;
-      using boost::math::tools::promote_args;
           
       T_partials_return P(1.0);
           
@@ -312,7 +310,6 @@ namespace stan {
       using stan::math::check_less_or_equal;
       using stan::math::check_nonnegative;
       using stan::math::value_of;
-      using boost::math::tools::promote_args;
           
       T_partials_return P(0.0);
           
@@ -423,7 +420,6 @@ namespace stan {
       using stan::math::check_less_or_equal;
       using stan::math::check_nonnegative;
       using stan::math::value_of;
-      using boost::math::tools::promote_args;
           
       T_partials_return P(0.0);
           

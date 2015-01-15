@@ -162,7 +162,6 @@ namespace stan {
       using stan::math::check_finite;
       using stan::math::check_nonnegative;
       using stan::math::check_positive_finite;
-      using boost::math::tools::promote_args;
       using stan::math::value_of;
 
       // check if any vectors are zero length
@@ -240,7 +239,6 @@ namespace stan {
       using stan::math::check_finite;
       using stan::math::check_nonnegative;
       using stan::math::check_positive_finite;
-      using boost::math::tools::promote_args;
       using stan::math::value_of;
 
       // check if any vectors are zero length
@@ -311,7 +309,6 @@ namespace stan {
       using stan::math::check_finite;
       using stan::math::check_nonnegative;
       using stan::math::check_positive_finite;
-      using boost::math::tools::promote_args;
       using stan::math::value_of;
 
       // check if any vectors are zero length

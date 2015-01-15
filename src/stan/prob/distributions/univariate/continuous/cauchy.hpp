@@ -174,7 +174,6 @@ namespace stan {
       using stan::math::check_finite;
       using stan::math::check_not_nan;
       using stan::math::check_consistent_sizes;
-      using boost::math::tools::promote_args;
       using stan::math::value_of;
 
       T_partials_return P(1.0);
@@ -273,7 +272,6 @@ namespace stan {
       using stan::math::check_finite;
       using stan::math::check_not_nan;
       using stan::math::check_consistent_sizes;
-      using boost::math::tools::promote_args;
       using stan::math::value_of;
 
       T_partials_return cdf_log(0.0);
@@ -343,7 +341,6 @@ namespace stan {
       using stan::math::check_finite;
       using stan::math::check_not_nan;
       using stan::math::check_consistent_sizes;
-      using boost::math::tools::promote_args;
       using stan::math::value_of;
 
       T_partials_return ccdf_log(0.0);
